@@ -45,21 +45,25 @@ class KalmanFilter(Filter):
 
         return values
     
-""" class RTSFilter(Filter):
+
+class RTSFilter(Filter):
     def __init__(self, kalman_filter):
         self.dim_x = kalman_filter.dim_x
         self.dim_z = kalman_filter.dim_z
         self.num_nodes = kalman_filter.num_nodes
 
         self.filters = kalman_filter.filters
+    
+    def update(self, z):
+        raise NotImplementedError("RTSFilter does not support single update. Use update_from_array instead.")
         
     def update_from_array(self, z_array):
         assert type(z_array) == np.ndarray, "Measurement must be a numpy array"
         values = []
 
         for i, filter in enumerate(self.filters):
-            mu, cov, _, _ = filter.batch_filter
-            xs, cov = filter.rts_smoother(z_array[:, i, :])
+            mu, cov, _, _ = filter.batch_filter(z_array[:, i, :])
+            xs, _, _, _ = filter.rts_smoother(mu, cov)
             values.append(xs)
 
-        return np.array(values) """
+        return np.array(values).transpose(1,0,2,3).reshape(z_array.shape[0], z_array.shape[1], -1)
