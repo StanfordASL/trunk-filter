@@ -26,7 +26,7 @@ class TrunkFilter(CompositeFilter):
         )
 
 class NonCausalTrunkFilter(CompositeFilter):
-    def __init__(self, window_size=3, measurement_noise=1e-2, position_process_noise=1e-4, velocity_process_noise=1000e-2):
+    def __init__(self, window_size=3, measurement_noise=1e-1, position_process_noise=0, velocity_process_noise=1e1):
         super().__init__(
             RTSFilter(
                 KalmanFilter(num_nodes=3, measurement_noise=measurement_noise, position_process_noise=position_process_noise, velocity_process_noise=velocity_process_noise)

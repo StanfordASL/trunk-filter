@@ -1,5 +1,7 @@
 from trunk_filter import TrunkFilter
 from trunk_filter.composite_filter import NonCausalTrunkFilter
+from trunk_filter.utils import integrate_positions_from_velocity
+
 import numpy as np
 import pandas as pd
 import os
@@ -31,13 +33,7 @@ def test_real_data(filter):
     real_data_array = real_data_array[:200]
 
     filtered_data = filter.update_from_array(real_data_array)
-    integrated_data = np.array([
-        [np.cumsum(filtered_data[:, i, 2*j + 1]*0.01) for j in range(real_data_array.shape[2])] for i in range(real_data_array.shape[1])
-    ]).transpose(2,0,1)
-
-    integrated_data += real_data_array[0:1, :, :]  # Add the initial position
-
-    
+    integrated_data = integrate_positions_from_velocity(real_data_array, filtered_data)
 
     i,j = 0,0
     plt.figure()
