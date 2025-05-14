@@ -19,7 +19,7 @@ def integrate_positions_from_velocity(real_data_array, filtered_data, dt=0.01):
     return new_data
 
 def get_data_array_from_dataframe(df):
-    links = [int(re.findall(r'\d+', col)[0]) for col in df.columns if col.startswith('x') and not col.endswith('_new')]
+    links = sorted([int(re.findall(r'\d+', col)[0]) for col in df.columns if col.startswith('x') and not col.endswith('_new')])
     query = [f'{axis}{i}' for i in links for axis in ['x', 'vx', 'y', 'vy', 'z', 'vz']]
     return df[query].to_numpy().reshape(-1, len(links), 6)
 
