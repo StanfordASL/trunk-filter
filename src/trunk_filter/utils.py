@@ -1,4 +1,6 @@
 import numpy as np
+import pandas as pd
+import re
 
 def integrate_positions_from_velocity(real_data_array, filtered_data, dt=0.01):
     if not isinstance(real_data_array, np.ndarray):
@@ -15,3 +17,13 @@ def integrate_positions_from_velocity(real_data_array, filtered_data, dt=0.01):
     new_data[:, :, 0::2] = integrated_data
     
     return new_data
+
+def get_data_array_from_dataframe(df):
+    links = [int(re.findall(r'\d+', col)[0]) for col in df.columns if col.startswith('x') and not col.endswith('_new')]
+    query = [f'{axis}{i}' for i in links for axis in ['x', 'y', 'z']]
+    return df[query].to_numpy().reshape(-1, len(links), 3)
+
+def get_dataframe_from_data_array(data_array):
+    data = data_array.reshape(-1, 6 * data_array.shape[1])
+    columns = [f'{axis}{i+1}' for i in range(data_array.shape[1]) for axis in ['x', 'y', 'z', 'vx', 'vy', 'vz']]
+    return pd.DataFrame(data, columns=columns)
