@@ -53,7 +53,7 @@ def test_real_data(filter):
 if __name__ == "__main__":
     test_update()
     
-    for filter in tqdm([TrunkFilter(), NonCausalTrunkFilter()]):
+    for filter in tqdm([TrunkFilter(), NonCausalTrunkFilter()]): #TODO: Not pytest friendly
         test_real_data(filter)
 
     print("All tests passed!")

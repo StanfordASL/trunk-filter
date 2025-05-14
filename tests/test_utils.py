@@ -2,7 +2,7 @@ import os
 import numpy as np
 import pandas as pd
 
-from trunk_filter.utils import get_data_array_from_dataframe, get_dataframe_from_data_array, integrate_positions_from_velocity
+from trunk_filter.utils import get_data_array_from_dataframe, get_dataframe_from_data_array, get_input_array_from_dataframe, get_dataframe_from_input_array
 
 
 script_folder = os.path.dirname(os.path.abspath(__file__))
@@ -13,6 +13,12 @@ def test_invariance():
     arr = get_data_array_from_dataframe(real_data.copy())
     inv = get_dataframe_from_data_array(arr, join_with=real_data.copy())
     assert inv.equals(real_data), "The reconstructed DataFrame is not identical to the original DataFrame"
+
+def test_invariance_inputs():
+    arr = get_input_array_from_dataframe(real_data.copy())
+    inv = get_dataframe_from_input_array(arr, join_with=real_data.copy())
+    assert inv.equals(real_data), "The reconstructed DataFrame is not identical to the original DataFrame"
+
 
 if __name__ == "__main__":
     test_invariance()
